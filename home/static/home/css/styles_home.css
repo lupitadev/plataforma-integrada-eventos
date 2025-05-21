@@ -1,0 +1,20 @@
+/* Estilos personalizados */
+body {
+  height: 100%;
+}
+
+.hero-section {
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url("{% static 'images/' %}{{ heroBanner }}");
+
+  background-size: cover;
+  background-position: center;
+  min-height: 500px;
+}
+.btn-create-event {
+  background-color: #ff6b35;
+  border: none;
+}
+.btn-create-event:hover {
+  background-color: #ff8c5a;
+}
