@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es" class="h-100">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}{% endblock %}</title>
+    <!-- Bootstrap local -->
+    <link rel="stylesheet" href="{% static 'home/css/bootstrap.min.css' %}" />
+    <!-- Font Awesome local (opcional) -->
+    <link
+      rel="stylesheet"
+      href="{% static 'home/css/fontawesome.all.min.css' %}"
+    />
+  </head>
+  <body class="d-flex flex-column h-100">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+      <div class="container">
+        <!-- Logo + Nombre -->
+        <a class="navbar-brand" href="{% url 'home' %}">
+          <img
+            src="{% static 'images/logo.png' %}"
+            alt="Logo"
+            width="30"
+            height="30"
+            class="d-inline-block align-top"
+          />
+          EventMaster
+        </a>
+
+        <!-- Barra de búsqueda -->
+        <form class="d-flex mx-lg-4 flex-grow-1">
+          <div class="input-group">
+            <input
+              class="form-control"
+              type="search"
+              placeholder="Buscar eventos..."
+              aria-label="Search"
+            />
+            <select class="form-select" style="max-width: 150px">
+              <option>Todas categorías</option>
+              <option>Conciertos</option>
+              <option>Conferencias</option>
+            </select>
+            <button class="btn btn-primary" type="submit">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </form>
+
+        <!-- Botones de acceso -->
+        <div class="d-flex">
+          <a href="/login" class="btn btn-outline-light me-2">Iniciar Sesión</a>
+          <a href="/registerUser.html" class="btn btn-primary me-2"
+            >Registrarse</a
+          >
+          <a href="/createEvent.html" class="btn btn-create-event text-white">
+            <i class="fas fa-plus-circle"></i> Crear Evento
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <main class="container my-4 flex-shrink-0">{% block content %}{% endblock %}</main>
+
+    <!-- Footer -->
+    <footer class="bg-dark mt-auto text-white py-4">
+      <div class="container">
+        <div class="text-center">
+          <p>
+            &copy; {{ year_actual }} EventMaster. Todos los derechos reservados.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{% static 'home/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'home/js/all.min.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>
