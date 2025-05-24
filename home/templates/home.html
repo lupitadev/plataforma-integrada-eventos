@@ -1,195 +1,58 @@
+{% extends "index.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{{ titulo_pagina }}</title>
-    <!-- Bootstrap CSS -->
-    <link href="{% static 'home/css/bootstrap.min.css' %}" rel="stylesheet" />
-    <!-- Font Awesome -->
-    <link href="{% static 'home/css/all.min.css' %}" rel="stylesheet" />
-    <link href="{% static 'home/css/styles_home.css' %}" rel="stylesheet" />
-  </head>
-  <body class="d-flex flex-column h-100">
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-      <div class="container">
-        <!-- Logo + Nombre -->
-        <a class="navbar-brand" href="{% url 'home' %}">
-          <img
-            src="{% static 'images/logo.png' %}"
-            alt="Logo"
-            width="30"
-            height="30"
-            class="d-inline-block align-top"
-          />
-          EventMaster
-        </a>
 
-        <!-- Barra de búsqueda -->
-        <form class="d-flex mx-lg-4 flex-grow-1">
-          <div class="input-group">
-            <input
-              class="form-control"
-              type="search"
-              placeholder="Buscar eventos..."
-              aria-label="Search"
-            />
-            <select class="form-select" style="max-width: 150px">
-              <option>Todas categorías</option>
-              <option>Conciertos</option>
-              <option>Conferencias</option>
-            </select>
-            <button class="btn btn-primary" type="submit">
-              <i class="fas fa-search"></i>
-            </button>
-          </div>
-        </form>
+{% block title %}Inicio - EventMaster{% endblock %}
 
-        <!-- Botones de acceso -->
-        <div class="d-flex">
-          <a href="/login" class="btn btn-outline-light me-2">Iniciar Sesión</a>
-          <a href="{% url 'register' %}" class="btn btn-primary me-2">Registrarse</a>
-          <a href="/createEvent" class="btn btn-create-event text-white">
-            <i class="fas fa-plus-circle"></i> Crear Evento
-          </a>
-        </div>
-      </div>
-    </nav>
-
+{% block content %}
     <!-- Hero Section -->
     <section class="hero-section text-white d-flex align-items-center">
-      <div class="container py-5">
-        <div class="row">
-          <div class="col-lg-6">
-            <h1 class="display-3 fw-bold mb-4">
-              Los mejores eventos en un solo lugar
-            </h1>
-            <p class="lead mb-4">
-              Descubre experiencias únicas o comparte tu pasión organizando tu
-              propio evento.
-            </p>
-            <div class="d-flex gap-3">
-              <a href="#eventos" class="btn btn-light btn-lg px-4">
-                <i class="fas fa-ticket-alt me-2"></i> Explorar Eventos
-              </a>
-              <a href="#" class="btn btn-outline-light btn-lg px-4">
-                <i class="fas fa-video me-2"></i> Ver Video
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Sección Eventos (ID para ancla) -->
-    <section id="eventos" class="py-5 bg-light">
-      <div class="container">
-        <h2 class="text-center mb-5">Eventos Destacados</h2>
-        <div class="row g-4">
-          {% for evento in eventos_destacados %}
-          <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-              <img
-                src="{% static 'images/' %}{{ evento.imagen }}"
-                class="card-img-top"
-                style="height: 200px; object-fit: cover"
-              />
-              <div class="card-body">
-                <span class="badge bg-primary mb-2"
-                  >{{ evento.categoria }}</span
-                >
-                <h5>{{ evento.titulo }}</h5>
-                <p class="text-muted">
-                  <i class="fas fa-calendar-day me-1"></i> {{ evento.fecha }}<br />
-                  <i class="fas fa-map-marker-alt me-1"></i> {{ evento.ubicacion
-                  }}
-                </p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span class="fw-bold text-danger">{{ evento.precio }}</span>
-                  <a href="#" class="btn btn-sm btn-outline-primary"
-                    >Detalles</a
-                  >
+        <div class="container-fluid py-5">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h1 class="display-3 fw-bold mb-4">
+                        Los mejores eventos en un solo lugar
+                    </h1>
+                    <p class="lead mb-4">
+                        Descubre experiencias únicas o comparte tu pasión organizando tu propio evento.
+                    </p>
+                    <div class="d-flex gap-3">
+                        <a href="#eventos" class="btn btn-light btn-lg px-4">
+                            <i class="fas fa-ticket-alt me-2"></i> Explorar Eventos
+                        </a>
+                        <a href="#" class="btn btn-outline-light btn-lg px-4">
+                            <i class="fas fa-video me-2"></i> Ver Video
+                        </a>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
-          {% endfor %}
         </div>
-      </div>
     </section>
 
-    <!-- Carrusel de eventos -->
-    <div class="carousel">
-      {% for evento in eventos %}
-      <div class="evento-card">
-        <img src="{{ evento.imagen.url }}" />
-        <h3>{{ evento.titulo }}</h3>
-        <p>{{ evento.fecha }}</p>
-        <a href="/eventos" class="btn">Ver más</a>
-      </div>
-      {% endfor %}
-    </div>
-
-    <!-- Modal para crear eventos (usa Bootstrap) -->
-    <div class="modal fade" id="modalEvento">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <form
-            method="post"
-            action="/crear-evento/"
-            enctype="multipart/form-data"
-          >
-            <input type="hidden" name="tipo" id="tipoEvento" />
-            <!-- Campos comunes -->
-            <input type="text" name="titulo" placeholder="Título" required />
-            <textarea name="descripcion" required></textarea>
-            <input type="datetime-local" name="fecha" required />
-            <input type="file" name="imagen" accept="image/*" required />
-
-            <!-- Campos dinámicos (se llenan con JS) -->
-            <div id="camposVirtual" style="display: none">
-              <input
-                type="url"
-                name="enlace_virtual"
-                placeholder="Enlace Zoom/Teams"
-              />
+    <!-- Sección Eventos -->
+    <section id="eventos" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Eventos Destacados</h2>
+            <div class="row g-4">
+                {% for evento in eventos_destacados %}
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="{% static 'images/' %}{{ evento.imagen }}" class="card-img-top" style="height: 200px; object-fit: cover" />
+                        <div class="card-body">
+                            <span class="badge bg-primary mb-2">{{ evento.categoria }}</span>
+                            <h5>{{ evento.titulo }}</h5>
+                            <p class="text-muted">
+                                <i class="fas fa-calendar-day me-1"></i> {{ evento.fecha }}<br />
+                                <i class="fas fa-map-marker-alt me-1"></i> {{ evento.ubicacion }}
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fw-bold text-danger">{{ evento.precio }}</span>
+                                <a href="#" class="btn btn-sm btn-outline-primary">Detalles</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-            <div id="camposPresencial" style="display: none">
-              <input type="text" name="direccion" placeholder="Dirección" />
-              <input type="text" name="ciudad" placeholder="Ciudad" />
-            </div>
-            <button type="submit">Crear</button>
-          </form>
         </div>
-      </div>
-    </div>
-
-    <!-- Script para mostrar campos según tipo -->
-    <script>
-      function mostrarCampos(tipo) {
-        document.getElementById("tipoEvento").value = tipo;
-        document.getElementById("camposVirtual").style.display =
-          tipo === "VIRTUAL" ? "block" : "none";
-        document.getElementById("camposPresencial").style.display =
-          tipo === "PRESENCIAL" ? "block" : "none";
-      }
-    </script>
-
-    <!-- Footer -->
-    <footer class="bg-dark mt-auto text-white py-4">
-      <div class="container">
-        <div class="text-center">
-          <p>
-            &copy; {{ year_actual }} EventMaster. Todos los derechos reservados.
-          </p>
-        </div>
-      </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script src="{% static 'home/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'home/js/all.min.js' %}"></script>
-  </body>
-</html>
+    </section>
+{% endblock %}

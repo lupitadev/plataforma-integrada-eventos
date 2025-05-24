@@ -4,111 +4,80 @@
 {% block title %}Registro de Usuario{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
             <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0 text-center">Crear Cuenta</h2>
+                </div>
                 <div class="card-body p-4">
-                    <h3 class="card-title text-center mb-4">Registro de Usuario</h3>
-                    
-                    {# Mostrar mensajes de error/success #}
                     {% if messages %}
                         {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                                {{ message }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
+                        <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %} alert-dismissible fade show">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
                         {% endfor %}
                     {% endif %}
-                    
-                    <form method="post" action="{% url 'register' %}">
+
+                    <form method="post" novalidate>
                         {% csrf_token %}
                         
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="username" class="form-label">Usuario</label>
-                                <input type="text" 
-                                       class="form-control {% if form.username.errors %}is-invalid{% endif %}" 
-                                       id="username" 
-                                       name="username" 
-                                       placeholder="Crea un nombre de usuario" 
-                                       value="{{ form.username.value|default:'' }}"
-                                       required>
-                                {% if form.username.errors %}
-                                    <div class="invalid-feedback">
-                                        {{ form.username.errors.0 }}
-                                    </div>
-                                {% endif %}
-                            </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <label for="email" class="form-label">Correo Electrónico</label>
-                                <input type="email" 
-                                       class="form-control {% if form.email.errors %}is-invalid{% endif %}" 
-                                       id="email" 
-                                       name="email" 
-                                       placeholder="tucorreo@ejemplo.com" 
-                                       value="{{ form.email.value|default:'' }}"
-                                       required>
-                                {% if form.email.errors %}
-                                    <div class="invalid-feedback">
-                                        {{ form.email.errors.0 }}
-                                    </div>
-                                {% endif %}
-                            </div>
+                        <div class="mb-3">
+                            <label for="id_username" class="form-label">Nombre de usuario</label>
+                            <input type="text" name="username" class="form-control {% if form.errors.username %}is-invalid{% endif %}" 
+                                   id="id_username" required maxlength="150" autofocus>
+                            {% if form.errors.username %}
+                                <div class="invalid-feedback">
+                                    {{ form.errors.username.0 }}
+                                </div>
+                            {% endif %}
+                            <small class="form-text text-muted">
+                                Requerido. 150 caracteres o menos. Letras, dígitos y @/./+/-/_ solamente.
+                            </small>
                         </div>
                         
                         <div class="mb-3">
-                            <label for="password" class="form-label">Contraseña</label>
-                            <input type="password" 
-                                   class="form-control {% if form.password.errors %}is-invalid{% endif %}" 
-                                   id="password" 
-                                   name="password" 
-                                   placeholder="Mínimo 8 caracteres" 
-                                   required>
-                            {% if form.password.errors %}
+                            <label for="id_password1" class="form-label">Contraseña</label>
+                            <input type="password" name="password1" class="form-control {% if form.errors.password2 %}is-invalid{% endif %}" 
+                                   id="id_password1" required>
+                            {% if form.errors.password2 %}
                                 <div class="invalid-feedback">
-                                    {{ form.password.errors.0 }}
+                                    {{ form.errors.password2.0 }}
                                 </div>
                             {% endif %}
                         </div>
                         
                         <div class="mb-4">
-                            <label for="tipo_usuario" class="form-label">Tipo de Usuario</label>
-                            <select class="form-select {% if form.tipo_usuario.errors %}is-invalid{% endif %}" 
-                                    id="tipo_usuario" 
-                                    name="tipo_usuario" 
-                                    required>
-                                <option value="" disabled selected>Selecciona un tipo</option>
-                                <option value="ASISTENTE" {% if form.tipo_usuario.value == 'ASISTENTE' %}selected{% endif %}>Asistente a Eventos</option>
-                                <option value="ORGANIZADOR" {% if form.tipo_usuario.value == 'ORGANIZADOR' %}selected{% endif %}>Organizador de Eventos</option>
-                            </select>
-                            {% if form.tipo_usuario.errors %}
-                                <div class="invalid-feedback">
-                                    {{ form.tipo_usuario.errors.0 }}
-                                </div>
-                            {% endif %}
+                            <label for="id_password2" class="form-label">Confirmar contraseña</label>
+                            <input type="password" name="password2" class="form-control" id="id_password2" required>
+                            <div class="mt-2">
+                                <small class="text-muted">Requisitos de contraseña:</small>
+                                <ul class="small text-muted">
+                                    <li>Mínimo 8 caracteres</li>
+                                    <li>No puede ser similar al nombre de usuario</li>
+                                    <li>No puede ser completamente numérica</li>
+                                    <li>No puede ser una contraseña común</li>
+                                </ul>
+                            </div>
                         </div>
                         
-                        <button type="submit" class="btn btn-success w-100 py-2">
-                            <i class="bi bi-person-plus me-2"></i> Registrarse
-                        </button>
-                        
-                        <div class="text-center mt-3">
-                            <p>¿Ya tienes una cuenta? <a href="{% url 'login' %}">Inicia sesión</a></p>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-user-plus me-2"></i> Registrarse
+                            </button>
                         </div>
                     </form>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="text-center">
+                        <p class="mb-0">¿Ya tienes una cuenta? <a href="{% url 'login' %}" class="fw-bold">Inicia Sesión</a></p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block extra_css %}
-<!-- Si necesitas estilos adicionales específicos para esta página -->
-{% endblock %}
-
-{% block extra_js %}
-<!-- Si necesitas scripts adicionales específicos para esta página -->
 {% endblock %}

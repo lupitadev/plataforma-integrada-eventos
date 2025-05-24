@@ -1,0 +1,14 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <h2>Crear Evento Virtual</h2>
+    <form method="post">
+        {% csrf_token %}
+        <!-- Aquí irán tus campos del formulario -->
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Crear Evento</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
