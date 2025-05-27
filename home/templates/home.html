@@ -4,55 +4,127 @@
 {% block title %}Inicio - EventMaster{% endblock %}
 
 {% block content %}
-    <!-- Hero Section -->
-    <section class="hero-section text-white d-flex align-items-center">
-        <div class="container-fluid py-5">
-            <div class="row">
-                <div class="col-lg-6">
-                    <h1 class="display-3 fw-bold mb-4">
-                        Los mejores eventos en un solo lugar
-                    </h1>
-                    <p class="lead mb-4">
-                        Descubre experiencias únicas o comparte tu pasión organizando tu propio evento.
-                    </p>
-                    <div class="d-flex gap-3">
-                        <a href="#eventos" class="btn btn-light btn-lg px-4">
-                            <i class="fas fa-ticket-alt me-2"></i> Explorar Eventos
-                        </a>
-                        <a href="#" class="btn btn-outline-light btn-lg px-4">
-                            <i class="fas fa-video me-2"></i> Ver Video
-                        </a>
-                    </div>
-                </div>
-            </div>
+<!-- Hero Section Mejorada -->
+<section class="hero-section">
+  <!-- Contenido del hero -->
+  <div class="hero-content container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center text-lg-start">
+        <h1 class="display-3 fw-bold mb-4 text-white">
+          Transforma momentos en <span class="text-primary">experiencias inolvidables</span>
+        </h1>
+        <p class="lead mb-5 text-white-50">
+          Descubre los eventos más exclusivos o comparte tu pasión organizando 
+          tu propio evento. Conectamos personas con experiencias extraordinarias.
+        </p>
+        <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+          <a href="#eventos" class="btn btn-primary btn-lg px-4 py-3 rounded-pill">
+            <i class="fas fa-ticket-alt me-2"></i> Explorar Eventos
+          </a>
+          <a href="#" class="btn btn-outline-light btn-lg px-4 py-3 rounded-pill">
+            <i class="fas fa-play-circle me-2"></i> Ver Video Demo
+          </a>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Flecha para scroll down -->
+  <a href="#eventos" class="scroll-down-arrow text-white">
+    <i class="bi bi-chevron-down"></i>
+  </a>
+</section>
 
-    <!-- Sección Eventos -->
-    <section id="eventos" class="py-5 bg-light">
-        <div class="container">
-            <h2 class="text-center mb-5">Eventos Destacados</h2>
-            <div class="row g-4">
-                {% for evento in eventos_destacados %}
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <img src="{% static 'images/' %}{{ evento.imagen }}" class="card-img-top" style="height: 200px; object-fit: cover" />
-                        <div class="card-body">
-                            <span class="badge bg-primary mb-2">{{ evento.categoria }}</span>
-                            <h5>{{ evento.titulo }}</h5>
-                            <p class="text-muted">
-                                <i class="fas fa-calendar-day me-1"></i> {{ evento.fecha }}<br />
-                                <i class="fas fa-map-marker-alt me-1"></i> {{ evento.ubicacion }}
-                            </p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="fw-bold text-danger">{{ evento.precio }}</span>
-                                <a href="#" class="btn btn-sm btn-outline-primary">Detalles</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
+<!-- Sección Eventos -->
+<section class="featured-events py-5" id="eventos">
+  <div class="container">
+    <h2 class="text-center mb-4">Eventos Recientes</h2>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      {% for event in random_events %}
+      <div class="col">
+        <div class="card h-100 shadow-sm border-0 overflow-hidden">
+          {% if event.image %}
+          <img src="{{ event.image.url }}" class="card-img-top" alt="{{ event.title }}" style="height: 200px; object-fit: cover">
+          {% else %}
+          <img src="{% static 'images/event-placeholder.jpg' %}" class="card-img-top" alt="Evento sin imagen" style="height: 200px; object-fit: cover">
+          {% endif %}
+          
+          <div class="card-body">
+            <h5 class="card-title">{{ event.title }}</h5>
+            <p class="card-text text-muted">
+              <small>
+                <i class="bi bi-calendar-event"></i> {{ event.date|date:"M d, Y" }}<br>
+                <i class="bi {% if event.link %}bi-globe{% else %}bi-geo-alt{% endif %}"></i>
+                {% if event.link %}
+                  Evento Virtual
+                {% else %}
+                  {{ event.location|default:"Ubicación no especificada" }}
+                {% endif %}
+              </small>
+            </p>
+            <p class="card-text">{{ event.description|truncatechars:100 }}</p>
+          </div>
+          
+          <div class="card-footer bg-transparent border-0">
+            {% if event.link %}
+            <a href="{{ event.link }}" target="_blank" class="btn btn-sm btn-primary rounded-pill">
+              Acceder al evento
+            </a>
+            {% else %}
+            <a href="{% url 'event_detail' event.id %}" class="btn btn-sm btn-primary rounded-pill">
+              Ver detalles
+            </a>
+            {% endif %}
+          </div>
         </div>
-    </section>
+      </div>
+      {% empty %}
+      <div class="col-12">
+        <div class="alert alert-info text-center">
+          No hay eventos disponibles en este momento.
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="text-center mt-5">
+      <a href="{% url 'event_list' %}" class="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow">
+        Ver todos los eventos <i class="bi bi-arrow-right ms-2"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Estilos personalizados para el hero -->
+<style>
+  .hero-section {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    overflow: hidden;
+  }
+  
+  .hero-background img {
+    object-fit: cover;
+    min-height: 100%;
+    min-width: 100%;
+  }
+  
+  .z-index-1 {
+    z-index: 1;
+  }
+  
+  .object-fit-cover {
+    object-fit: cover;
+  }
+  
+  .btn-primary {
+    background-color: #4e73df;
+    border-color: #4e73df;
+  }
+  
+  .btn-primary:hover {
+    background-color: #3a56c0;
+    border-color: #3a56c0;
+  }
+</style>
 {% endblock %}

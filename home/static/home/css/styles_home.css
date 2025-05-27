@@ -1,116 +1,44 @@
-/* Reset básico */
-html,
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow-x: hidden;
-}
-
-/* Estructura principal */
-body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  padding-top: 56px; /* Altura del navbar */
-}
-
-/* Navbar */
-.navbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-  height: 56px;
-}
-
-/* Hero Section - SOLUCIÓN PARA EL ESPACIO */
 .hero-section {
-  width: 100%;
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  height: 85vh;
   min-height: 500px;
+  max-height: 800px;
   background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-    url("{% static 'images/hero-banner.jpg' %}");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+    url("{% static 'images/heroBanner.jpg' %}") center/cover no-repeat;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 50px;
-  margin-top: -56px; /* Compensa el padding del body */
-  padding-top: 106px; /* 56px (navbar) + 50px */
+  margin-top: -56px;
+  padding-top: 56px;
+  overflow: hidden;
+  /* Nuevas propiedades para bordes redondeados */
+  border-bottom-left-radius: 60px 30px;
+  border-bottom-right-radius: 40px 20px;
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2); /* Opcional: sombra para profundidad */
 }
 
-/* Estilos para botones */
-.btn-create-event {
-  background-color: #ff6b35;
-  border: none;
-}
-
-.btn-create-event:hover {
-  background-color: #ff8c5a;
-}
-
-/* PERFIL - Sidebar y contenido */
-.profile-wrapper {
-  display: flex;
-  flex: 1;
-  position: relative;
-  min-height: calc(100vh - 56px);
-}
-
-.sidebar-fixed {
-  width: 250px;
-  background-color: #343a40;
-  color: white;
-  padding: 20px 0;
-  position: fixed;
-  top: 56px;
-  bottom: 0;
+/* Asegúrate que el pseudo-elemento ::before también tenga los bordes redondeados */
+.hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
   left: 0;
-  z-index: 900;
-  overflow-y: auto;
-}
-
-.main-content {
-  flex: 1;
-  margin-left: 250px;
-  padding: 20px;
-  min-height: calc(100vh - 56px - 60px); /* Resta navbar y footer */
-}
-
-/* Footer - SOLUCIÓN PARA QUE NO SE OCULTE */
-footer {
-  background-color: #343a40;
-  color: white;
-  padding: 20px 0;
   width: 100%;
-  position: relative;
-  z-index: 950;
-  margin-top: auto;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
 }
 
-/* Responsive */
-@media (max-width: 992px) {
-  .profile-wrapper {
-    flex-direction: column;
-  }
-
-  .sidebar-fixed {
-    position: relative;
-    width: 100%;
-    height: auto;
-    top: auto;
-  }
-
-  .main-content {
-    margin-left: 0;
-    min-height: auto;
-  }
-
+/* Ajustes responsivos para los bordes */
+@media (max-width: 768px) {
   .hero-section {
-    margin-top: 0;
-    padding-top: 50px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
   }
 }

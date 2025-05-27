@@ -20,8 +20,9 @@ urlpatterns = [
     path("registerUser/", views.register_User, name="registerUser"),
     path("password_reset/", auth_views.PasswordResetView.as_view(), name="password_reset"),
     path("create-event/", views.create_event, name="create_event"),
-    path("events/", views.all_events, name="events"),
     path("check-user/", views.check_user_status, name="check_user"),
     path("profile/", views.profile, name="profile"),
     path('logout/', LogoutView.as_view(next_page='home'), name='logout'),
+    path('events', views.eventListView.as_view(), name='event_list'),
+    path('create/', views.eventCreateView.as_view(), name='event_virtual_create'),
 ]
