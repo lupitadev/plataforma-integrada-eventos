@@ -1,20 +1,44 @@
-/* Estilos personalizados */
-body {
-  height: 100%;
-}
-
 .hero-section {
-  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-    url("{% static 'images/' %}{{ heroBanner }}");
-
-  background-size: cover;
-  background-position: center;
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  height: 85vh;
   min-height: 500px;
+  max-height: 800px;
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url("{% static 'images/heroBanner.jpg' %}") center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  margin-top: -56px;
+  padding-top: 56px;
+  overflow: hidden;
+  /* Nuevas propiedades para bordes redondeados */
+  border-bottom-left-radius: 60px 30px;
+  border-bottom-right-radius: 40px 20px;
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2); /* Opcional: sombra para profundidad */
 }
-.btn-create-event {
-  background-color: #ff6b35;
-  border: none;
+
+/* Asegúrate que el pseudo-elemento ::before también tenga los bordes redondeados */
+.hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
 }
-.btn-create-event:hover {
-  background-color: #ff8c5a;
+
+/* Ajustes responsivos para los bordes */
+@media (max-width: 768px) {
+  .hero-section {
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+  }
 }
