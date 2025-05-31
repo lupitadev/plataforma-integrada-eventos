@@ -1,3 +1,4 @@
+/* --------------Hero section style------------- */
 .hero-section {
   position: relative;
   width: 100vw;
@@ -8,8 +9,7 @@
   height: 85vh;
   min-height: 500px;
   max-height: 800px;
-  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-    url("{% static 'images/heroBanner.jpg' %}") center/cover no-repeat;
+  background: url("{% static 'images/heroBanner.jpg' %}") center/cover no-repeat;
   display: flex;
   align-items: center;
   margin-top: -56px;
@@ -18,10 +18,9 @@
   /* Nuevas propiedades para bordes redondeados */
   border-bottom-left-radius: 60px 30px;
   border-bottom-right-radius: 40px 20px;
-  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2); /* Opcional: sombra para profundidad */
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
 }
 
-/* Asegúrate que el pseudo-elemento ::before también tenga los bordes redondeados */
 .hero-section::before {
   content: "";
   position: absolute;
@@ -29,10 +28,24 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5); /* Ajusta este valor (0.5 es buen punto de partida) */
   z-index: 1;
   border-bottom-left-radius: inherit;
   border-bottom-right-radius: inherit;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2; /* Asegura que el contenido esté sobre la capa de oscurecimiento */
+}
+
+/* Texto siempre blanco y con sombra para mejor legibilidad */
+.hero-section h1,
+.hero-section p,
+.hero-section .btn {
+  position: relative;
+  z-index: 3;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
 }
 
 /* Ajustes responsivos para los bordes */
@@ -41,4 +54,101 @@
     border-bottom-left-radius: 30px;
     border-bottom-right-radius: 30px;
   }
+}
+
+/* --------------Profile Styles------------- */
+/* --- Estructura Base --- */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* --- Navbar Fixed --- */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px; /* Ajusta según tu navbar */
+    background: #ffffff;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* --- Contenedor Principal --- */
+.profile-wrapper {
+    display: flex;
+    flex: 1;
+    margin-top: 60px; /* Igual que altura navbar */
+    position: relative;
+}
+
+/* --- Sidebar Perfectamente Ajustado --- */
+.sidebar-fixed {
+    width: 280px;
+    background: #fff;
+    position: fixed;
+    left: 0;
+    top: 60px; /* Debajo del navbar */
+    bottom: 80px; /* Encima del footer */
+    height: auto; /* Importante: no usar height fija */
+    overflow-y: auto;
+    z-index: 900;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+}
+
+/* --- Contenido Principal --- */
+.main-content {
+    flex: 1;
+    margin-left: 280px;
+    padding: 2rem;
+    min-height: calc(100vh - 140px); /* 100vh - navbar - footer */
+    position: relative;
+    z-index: 800;
+}
+
+/* --- Footer Fixed --- */
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 280px; /* Igual que ancho sidebar */
+    right: 0;
+    height: 80px; /* Ajusta según tu footer */
+    background: #ffffff;
+    z-index: 950;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 992px) {
+    .profile-wrapper {
+        flex-direction: column;
+    }
+    
+    .sidebar-fixed {
+        position: relative;
+        width: 100%;
+        top: auto;
+        bottom: auto;
+        left: auto;
+        margin-top: 60px;
+    }
+    
+    .main-content {
+        margin-left: 0;
+        min-height: auto;
+        padding: 1.5rem;
+    }
+    
+    .footer {
+        position: relative;
+        left: 0;
+    }
 }
