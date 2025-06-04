@@ -2,6 +2,8 @@ import datetime
 from django.shortcuts import render, redirect
 from .models import VirtualEvent
 from django.contrib import messages
+from datetime import datetime
+
 
 # Create your views here.
 
@@ -24,9 +26,9 @@ def create_virtual_event(request):
                 )
                 return render(request, "virtualEvents/create_virtual_event.html")
 
-            # Combinar fecha y hora
+            # Combinar fecha y hora y convertir a datetime
             datetime_str = f"{date_str} {time_str}"
-            date = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M")
+            date = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M")  # Ahora funciona
 
             # Crear el evento
             event = VirtualEvent(
@@ -43,11 +45,12 @@ def create_virtual_event(request):
             event.save()
 
             messages.success(request, "¡Evento virtual creado exitosamente!")
-            return redirect(
-                "virtual_events:list"
-            )  # Asegúrate de tener esta URL definida
+            return redirect("home")
 
         except Exception as e:
             messages.error(request, f"Error al crear el evento: {str(e)}")
+            return render(
+                request, "create_virtual_event.html"
+            )  # Renderiza de nuevo con error
 
     return render(request, "create_virtual_event.html")
