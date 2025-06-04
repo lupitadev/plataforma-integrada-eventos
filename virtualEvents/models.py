@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
+from datetime import datetime
 
 
 class VirtualEvent(models.Model):
@@ -12,6 +13,8 @@ class VirtualEvent(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
+    fecha_texto = "2025-06-04 15:00:00"  # Fecha en formato de texto
+    fecha_objeto = datetime.strptime(fecha_texto, "%Y-%m-%d %H:%M:%S")
 
     class Meta:
         verbose_name = "Evento Virtual"

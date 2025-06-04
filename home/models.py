@@ -3,6 +3,7 @@ from django.urls import reverse
 
 # Create your models here.
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import Group, Permission
 
 
 # Modelo de Usuario personalizado
@@ -11,7 +12,6 @@ class User(AbstractUser):
         ("ASISTENTE", "Asistente"),
         ("ORGANIZADOR", "Organizador"),
     ]
-    from django.contrib.auth.models import Group, Permission
 
     groups = models.ManyToManyField(Group, related_name="home_usuario_groups")
     user_permissions = models.ManyToManyField(
