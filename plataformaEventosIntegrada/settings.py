@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'home',
     'liveEvents',
     'virtualEvents',
+    'polymorphic',
 ]
 
 MIDDLEWARE = [

@@ -4,6 +4,7 @@ from django.urls import reverse
 # Create your models here.
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import Group, Permission
+from polymorphic.models import PolymorphicModel
 
 
 # Modelo de Usuario personalizado
@@ -20,13 +21,22 @@ class User(AbstractUser):
     tipo_usuario = models.CharField(max_length=11, choices=TIPOS)
     telefono = models.CharField(max_length=15, blank=True)
 
+    def __str__(self):
+        return self.title
+
 
 # Modelo para Eventos (común para ambos tipos)
-class Event(models.Model):
+class Event(PolymorphicModel):
+    creator = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="created_events",
+        null=True,
+        blank=True,
+    )
     title = models.CharField(max_length=255, default="Título por defecto")
     description = models.TextField()
     date = models.DateTimeField()
-    location = models.CharField(max_length=200)
     image = models.ImageField(upload_to="images/", default="default_image.jpg")
     category = models.CharField(max_length=100, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

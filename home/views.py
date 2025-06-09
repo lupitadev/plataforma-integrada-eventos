@@ -1,10 +1,10 @@
-import random
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-
 from liveEvents.models import LiveEvent
 from virtualEvents.models import VirtualEvent
-from .models import Event
+from home.models import Event
+from liveEvents.models import LiveEvent
+from virtualEvents.models import VirtualEvent
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.contrib.auth.forms import UserCreationForm
@@ -14,20 +14,37 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth import logout
 from django.views.generic import ListView, CreateView
 from django.urls import reverse_lazy
+from itertools import chain
+import random
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 
 # Usar @csrf_exempt temporalmente (en producción quitarlo y usar {% csrf_token %} en los templates).
 
 
 # Página principal con carrusel
 def home(request):
-    from itertools import chain
+    search_query = request.GET.get("q", "")
 
-    live = LiveEvent.objects.filter(is_active=True)[:3]
-    virtual = VirtualEvent.objects.filter(is_active=True)[:3]
+    if search_query:
+        live = LiveEvent.objects.filter(is_active=True, title__icontains=search_query)[
+            :3
+        ]
+        virtual = VirtualEvent.objects.filter(
+            is_active=True, title__icontains=search_query
+        )[:3]
+    else:
+        live = LiveEvent.objects.filter(is_active=True)[:3]
+        virtual = VirtualEvent.objects.filter(is_active=True)[:3]
+
     random_events = list(chain(live, virtual))
     random.shuffle(random_events)
 
-    return render(request, "home.html", {"random_events": random_events})
+    return render(
+        request,
+        "home.html",
+        {"random_events": random_events, "search_query": search_query},
+    )
 
 
 # Todos los eventos (página aparte)
@@ -91,8 +108,39 @@ def register_User(request):
 
 # Interfaz del perfil de usuario
 @csrf_exempt
+@login_required
 def profile(request):
-    return render(request, "profile.html")
+    User = get_user_model()
+
+    try:
+        # Solución robusta para obtener el ID del usuario
+        user_id = request.user.id if hasattr(request.user, "id") else None
+
+        if not user_id:
+            return redirect("login")
+
+        # Consulta segura usando el ID directamente
+        user_events = (
+            Event.objects.filter(creator_id=user_id)  # Usamos el ID en lugar del objeto
+            .select_related("liveevent", "virtualevent")
+            .order_by("-date")
+        )
+
+        # Obtenemos el objeto User completo para el template
+        user = User.objects.get(pk=user_id)
+
+        return render(
+            request,
+            "profile.html",
+            {
+                "user": user,
+                "events": user_events,
+                "events_count": user_events.count(),
+            },
+        )
+
+    except User.DoesNotExist:
+        return redirect("login")
 
 
 # Verifica si el usuario existe en la base de datos
