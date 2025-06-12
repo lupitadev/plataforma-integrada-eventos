@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from liveEvents.models import LiveEvent
 from virtualEvents.models import VirtualEvent
-from home.models import Event
+from home.models import Event, User
 from liveEvents.models import LiveEvent
 from virtualEvents.models import VirtualEvent
 from django.views.decorators.csrf import csrf_exempt
@@ -172,7 +172,13 @@ def create_event(request):
             evento.ciudad = request.POST["ciudad"]
         evento.save()
         return redirect("home")
-
+    
+# Elimina la cuenta de usuario
+def delete_user(request):
+    user = get_object_or_404(get_user_model(), id=request.user.id)  # Usa el ID del usuario logueado
+    user.delete()
+    logout(request)  # Cierra la sesión
+    return redirect("home")  # Redirige a la página principal
 
 class eventListView(ListView):
     model = VirtualEvent
