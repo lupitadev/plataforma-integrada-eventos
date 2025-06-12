@@ -25,4 +25,5 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page='home'), name='logout'),
     path('events', views.eventListView.as_view(), name='event_list'),
     path('create/', views.eventCreateView.as_view(), name='event_virtual_create'),
+    path('delete-user/', views.delete_user, name='delete_user'),
 ]
